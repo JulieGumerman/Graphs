@@ -20,14 +20,38 @@ class Graph:
         return self.vertices[vertex_id]
 
     def bft(self, starting_vertex):
-        pass  # TODO
+        q = Queue()
+        visited = set()
+        #starting node in line
+        q.enqueue(starting_vertex)
+
+        while q.size() > 0:
+            #get next node out of line
+            v = q.dequeue()
+
+            if v not in visited:
+                print(v)
+                visited.add(v)
+                for neighbor in self.get_neighbors(v):
+                    q.enqueue(neighbor)
+
+
 
     def dft(self, starting_vertex):
-        """
-        Print each vertex in depth-first order
-        beginning from starting_vertex.
-        """
-        pass  # TODO
+        s = Stack
+        visited = set()
+
+        s.push(starting_vertex)
+        while s.size() > 0:
+            current_node = s.pop()
+
+            if current_node not in visited:
+                visited.add(current_node)
+                print(current_node)
+                edges = self.get_neighbors(current_node)
+                for e in edges:
+                    s.push(e)
+
 
     def dft_recursive(self, starting_vertex):
         """
