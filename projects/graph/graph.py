@@ -65,14 +65,18 @@ class Graph:
         s.push(starting_vertex)
         if s.size() < 1:
             return visited
-        current = s.pop()
-        if current not in visited:
-            visited.add(current)
-            print(current)
-            for vertex in self.get_neighbors(current):
-                s.push(vertex)
-        next_vertex = s.pop()
-        self.dft_recursive(next_vertex)
+        else:
+            current = s.pop()
+            if current not in visited:
+                visited.add(current)
+                print(current)
+                for vertex in self.get_neighbors(current):
+                    s.push(vertex)
+                
+            next_vertex = s.pop()
+            self.dft_recursive(next_vertex)            
+
+
 
         
 
