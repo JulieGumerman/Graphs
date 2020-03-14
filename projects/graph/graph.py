@@ -53,29 +53,29 @@ class Graph:
                     s.push(e)
 
 
-    def dft_recursive(self, starting_vertex):
+    def dft_recursive(self, starting_vertex, visited=None):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
 
         This should be done using recursion.
         """
-        s = Stack()
-        visited = set()
-        s.push(starting_vertex)
-        if s.size() < 1:
-            return visited
-        else:
-            current = s.pop()
-            if current not in visited:
-                visited.add(current)
-                print(current)
-                for vertex in self.get_neighbors(current):
-                    s.push(vertex)
-                
-            next_vertex = s.pop()
-            self.dft_recursive(next_vertex)            
+        #initialize set; you HAVE to pass visited back down through recursion or it'll loop forever, and you'll be sad
+        if visited == None:
+            visited = set()
+        
+        #print starting vertex; if you don't put this, everything else in your code will be right, but your test will fail because nothing got printed
+        print(starting_vertex)
 
+        #add your starting_vertex to visited or you'll be off on an infinite loop
+        visited.add(starting_vertex)
+
+        #now, look at your neighbors
+        for neighbor in self.get_neighbors(starting_vertex):
+            #if the neighbor hasn't been visited
+            if neighbor not in visited:
+                #time for recursion: lines 68 and 71 will take care of the immediate neighbors, and you'll keep going down the line
+                self.dft_recursive(neighbor, visited)
 
 
         
