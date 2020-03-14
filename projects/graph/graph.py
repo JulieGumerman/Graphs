@@ -38,7 +38,7 @@ class Graph:
 
 
     def dft(self, starting_vertex):
-        s = Stack
+        s = Stack()
         visited = set()
 
         s.push(starting_vertex)
@@ -60,7 +60,21 @@ class Graph:
 
         This should be done using recursion.
         """
-        pass  # TODO
+        s = Stack()
+        visited = set()
+        s.push(starting_vertex)
+        if s.size() < 1:
+            return visited
+        current = s.pop()
+        if current not in visited:
+            visited.add(current)
+            print(current)
+            for vertex in self.get_neighbors(current):
+                s.push(vertex)
+        next_vertex = s.pop()
+        self.dft_recursive(next_vertex)
+
+        
 
     def bfs(self, starting_vertex, destination_vertex):
         """
