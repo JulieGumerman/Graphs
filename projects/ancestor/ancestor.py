@@ -37,8 +37,10 @@ def earliest_ancestor(ancestors, starting_node):
         current_vertex = path[-1]
 
         if len(path) > len(longest_path):
+            print("original longest path", path)
             earliest_ancestor = current_vertex
             longest_path = path
+            print("new longest path", longest_path)
         if current_vertex not in visited:
             for neighbor in graph.get_neighbors(current_vertex):
                 path_copy = path.copy()
@@ -46,4 +48,8 @@ def earliest_ancestor(ancestors, starting_node):
                 q.enqueue(path_copy)
         
 
-    return earliest_ancestor
+    #return earliest_ancestor
+    if len(longest_path) > 1:
+        return earliest_ancestor
+    else:
+        return -1
