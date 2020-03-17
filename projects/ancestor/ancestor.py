@@ -28,28 +28,32 @@ def earliest_ancestor(ancestors, starting_node):
     q = Queue()
     q.enqueue([starting_node])
 
-    earliest_ancestor = None
+    earliest_ancestor = -1
     longest_path = []
+    longest_path_length = 1
     visited = set()
 
     while q.size() > 0:
         path = q.dequeue()
         current_vertex = path[-1]
 
-        if len(path) > len(longest_path):
-            print("original longest path", path)
+        if len(path) >= len(longest_path):
+            longest_path = path.copy()
+            print(longest_path)
+            longest_path_length = len(path)
             earliest_ancestor = current_vertex
-            longest_path = path
-            print("new longest path", longest_path)
-        if current_vertex not in visited:
-            for neighbor in graph.get_neighbors(current_vertex):
-                path_copy = path.copy()
-                path_copy.append(neighbor)
-                q.enqueue(path_copy)
-        
+            #print("earliest ancestor", earliest_ancestor)
+            #return earliest_ancestor
+        neighbors = graph.vertices[current_vertex]
 
+        for ancestor in neighbors:
+            path_copy = list(path)
+            path_copy.append(ancestor)
+            q.enqueue(path_copy)
+        
+    print("EARLIEST ANCESTOR!!!", earliest_ancestor)
     #return earliest_ancestor
-    if len(longest_path) > 1:
-        return earliest_ancestor
-    else:
+    if len(longest_path) < 2:
         return -1
+    else:
+        return earliest_ancestor
