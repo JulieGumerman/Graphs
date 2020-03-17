@@ -33,9 +33,13 @@ def earliest_ancestor(ancestors, starting_node):
         if next_ancestor[0] == distant_ancestor:
             distant_ancestor = next_ancestor[1]
 
-    for farther_back in ancestors:
-        if farther_back[0] == distant_ancestor:
-            distant_ancestor = farther_back[1]
+    # for farther_back in ancestors:
+    #     if farther_back[0] == distant_ancestor:
+    #         distant_ancestor = farther_back[1]
+    
+    # for prev_gen in ancestors:
+    #     if prev_gen[0] == distant_ancestor:
+    #         distant_ancestor = prev_gen[1]
     
     return distant_ancestor
 
