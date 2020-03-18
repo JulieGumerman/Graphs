@@ -20,17 +20,19 @@ class Graph:
 def earliest_ancestor(ancestors, starting_node):
     graph = Graph()
 
-    for node in ancestors:
-        graph.add_vertex(node[0])
-        graph.add_vertex(node[1])
-        graph.add_edge(node[1], node[0])
+    for pair in ancestors:
+        parent = pair[0]
+        child = pair [1]
+        graph.add_vertex(parent)
+        graph.add_vertex(child)
+        graph.add_edge(parent, child)
     
     q = Queue()
     q.enqueue([starting_node])
 
-    earliest_ancestor = -1
+    earliest_ancestor = None
     longest_path = []
-    longest_path_length = 1
+    longest_path_length = 0
     visited = set()
 
     while q.size() > 0:
