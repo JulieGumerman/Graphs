@@ -63,41 +63,35 @@ def go_travel(location):
                     break
             print("current map", my_map)
         else:
-            pass
-            #BFS for next 
-        #if "?" in my_map[current_room.id].values():
-            #now, how do you go exploring?
-            #for direction in current_room.get_directions():
-                #if there is a question mark, add to queue?
+            backtrack = bfs(current_room.id, my_map, traversal_path)
+            for item in backtrack:
+                traversal_path.append(item)
+                print("traversal path from else statement", traversal_path)
+            #What exactly is BFS supposed to be doing here?
+            #find the nearest room with a "?"
+            #go there
 
 
-    # for i in range(2):
-    #     player.travel("s")
-    #     traversal_path.append("s")
-    # for i in range(4):
-    #     player.travel("n")
-    #     traversal_path.append("n")
-    #     print("going north", player.current_room)
-    # for i in range(2):
-    #     player.travel("s")
-    #     traversal_path.append("s")
-    #     print("going south", player.current_room)
-    # for i in range(2):
-    #     player.travel("e")
-    #     traversal_path.append("e")
-    # for i in range(4):
-    #     player.travel("w")
-    #     traversal_path.append("w")
     
     return traversal_path
 
 #BFS to find the next room with a "?"
-def bfs():
+def bfs(current_room, my_map, traversal_path):
     q = Queue()
-    q.enqueue([])
+    q.enqueue([current_room])
     visited = set()
     while q.size() > 0:
-        current = q.dequeue()
+        path = q.dequeue()
+        current = path[-1]
+        if current not in visited:
+            visited.add(current)
+            if "?" in my_map[current].values():
+                return path
+            print("CURRENT", path)
+            for key, value in my_map[current].items():
+                path_copy = path.copy()
+                path_copy.append(value)
+                q.enqueue(path_copy)
 
 #Update my own map
 def map_it(maze_map, room):
