@@ -1,7 +1,7 @@
 from room import Room
 from player import Player
 from world import World
-
+from util import Stack, Queue
 import random
 from ast import literal_eval
 
@@ -11,10 +11,10 @@ world = World()
 
 # You may uncomment the smaller graphs for development and testing purposes.
 # map_file = "maps/test_line.txt"
-# map_file = "maps/test_cross.txt"
+map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
-map_file = "maps/main_maze.txt"
+#map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph=literal_eval(open(map_file, "r").read())
@@ -29,9 +29,29 @@ player = Player(world.starting_room)
 # traversal_path = ['n', 'n']
 traversal_path = []
 
+################################
+
+def go_travel():
+
+    s = Stack()
+    visited = set()
+    s.push(player.current_room)
 
 
+    while len(room_graph) > len(traversal_path) and s.size() > 0:
+        here = s.pop()
+        print("I'm right here!!!", here)
+        if "s" in here.get_exits():
+            player.travel("s")
+            traversal_path.append("s")
+
+    return traversal_path
+
+####################################
 # TRAVERSAL TEST
+
+go_travel()
+
 visited_rooms = set()
 player.current_room = world.starting_room
 visited_rooms.add(player.current_room)
