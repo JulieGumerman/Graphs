@@ -47,7 +47,11 @@ def go_travel(location):
             visited.add(current_room)
             map_it(my_map, current_room)
             print("current map", my_map)
-
+        
+        # if "s" in player.current_room.get_exits():
+        #     player.travel("s")
+        #     traversal_path.append("s")
+        #if "?" in my_map[current_room.id].values():
             #now, how do you go exploring?
             #for direction in current_room.get_directions():
                 #if there is a question mark, add to queue?
@@ -81,6 +85,7 @@ def bfs():
     while q.size() > 0:
         current = q.dequeue()
 
+#Update my own map
 def map_it(maze_map, room):
     maze_map[room.id] = {
         'n': '?',
