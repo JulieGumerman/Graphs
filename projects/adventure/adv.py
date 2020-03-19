@@ -33,28 +33,71 @@ traversal_path = []
 
 def go_travel(location):
 
+#DFT for getting to the end of the road
+    s = Stack()
+    visited = set()
+    my_map = {}
 
-    for i in range(2):
-        player.travel("s")
-        traversal_path.append("s")
-    for i in range(4):
-        player.travel("n")
-        traversal_path.append("n")
-        print("going north", player.current_room)
-    for i in range(2):
-        player.travel("s")
-        traversal_path.append("s")
-        print("going south", player.current_room)
-    for i in range(2):
-        player.travel("e")
-        traversal_path.append("e")
-    for i in range(4):
-        player.travel("w")
-        traversal_path.append("w")
+    s.push(location)
+
+    while s.size() > 0:
+        current_room = s.pop()
+
+        if current_room not in visited:
+            visited.add(current_room)
+            map_it(my_map, current_room)
+            print("current map", my_map)
+
+            #now, how do you go exploring?
+            #for direction in current_room.get_directions():
+                #if there is a question mark, add to queue?
+
+
+    # for i in range(2):
+    #     player.travel("s")
+    #     traversal_path.append("s")
+    # for i in range(4):
+    #     player.travel("n")
+    #     traversal_path.append("n")
+    #     print("going north", player.current_room)
+    # for i in range(2):
+    #     player.travel("s")
+    #     traversal_path.append("s")
+    #     print("going south", player.current_room)
+    # for i in range(2):
+    #     player.travel("e")
+    #     traversal_path.append("e")
+    # for i in range(4):
+    #     player.travel("w")
+    #     traversal_path.append("w")
     
     return traversal_path
 
+#BFS to find the next room with a "?"
+def bfs():
+    q = Queue()
+    q.enqueue([])
+    visited = set()
+    while q.size() > 0:
+        current = q.dequeue()
 
+def map_it(maze_map, room):
+    maze_map[room.id] = {
+        'n': '?',
+        'e': '?',
+        's': '?',
+        'w': '?'
+    }
+    print("get those exits", room.get_exits())
+    if "s" not in room.get_exits():
+        maze_map[room.id]['s'] = "X"
+    if "n" not in room.get_exits():
+        maze_map[room.id]['n'] = "X"
+    if "e" not in room.get_exits():
+        maze_map[room.id]['e'] = "X"
+    if "w" not in room.get_exits():
+        maze_map[room.id]['w'] = "X"
+    
 ####################################
 # TRAVERSAL TEST
 
