@@ -65,25 +65,26 @@ def go_travel(location, my_map=None):
             print("current map", my_map)
         else:
             backtrack = bfs(current_room.id, my_map)
-            go_travel(backtrack[-1], my_map)
+            route = []
             #Now, I have my route to backtrack; now, how do I do it???
             
-            # for step in backtrack:
-            #     """
-            #     1. Find the direction connected to that room
-            #     2. Append direction to travel_path
-            #     """
-            #     for key, value in my_map[current_room.id].items():
-            #         if value == step:
-            #             route.append(key)
-            #             print("ROUTE!!!", route)
-            #             break
-            # for direction in route:
-            #     player.travel(direction)
-            #     traversal_path.append(direction)
+            for step in backtrack:
+                """
+                1. Find the direction connected to that room
+                2. Append direction to travel_path
+                """
+                for key, value in my_map[current_room.id].items():
+                    if value == step:
+                        route.append(key)
+                        print("ROUTE!!!", route)
+                        break
 
-            # if "?" in my_map[current_room.id].values():
-            #     s.push(current_room)
+            for direction in route:
+                player.travel(direction)
+                traversal_path.append(direction)
+
+            if "?" in my_map[current_room.id].values():
+                s.push(current_room)
 
 
 
