@@ -85,11 +85,6 @@ def go_travel(location, my_map=None):
 
             if "?" in my_map[current_room.id].values():
                 s.push(current_room)
-
-
-
-
-
     
     return traversal_path
 
