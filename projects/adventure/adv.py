@@ -51,6 +51,13 @@ def go_travel(location):
         # if "s" in player.current_room.get_exits():
         #     player.travel("s")
         #     traversal_path.append("s")
+        for key, value in my_map[current_room.id].items():
+            if value == "?":
+                player.travel(key)
+                traversal_path.append(key)
+            print("KEY:", key, "VALUE:", value)
+
+        
         #if "?" in my_map[current_room.id].values():
             #now, how do you go exploring?
             #for direction in current_room.get_directions():
