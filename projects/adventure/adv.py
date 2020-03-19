@@ -44,6 +44,11 @@ def go_travel():
         if "s" in here.get_exits():
             player.travel("s")
             traversal_path.append("s")
+            go_travel()
+        elif "n" in here.get_exits():
+            player.travel("n")
+            traversal_path.append("n")
+            go_travel()
 
     return traversal_path
 
