@@ -56,7 +56,6 @@ def go_travel(location):
                     print("this room", this_room)
                     previous_room = this_room
                     player.travel(key)
-                    #assign as visited
                     my_map[this_room][key] = player.current_room.id
                     s.push(player.current_room)
                     traversal_path.append(key)
@@ -64,9 +63,10 @@ def go_travel(location):
             print("current map", my_map)
         else:
             backtrack = bfs(current_room.id, my_map, traversal_path)
-            for item in backtrack:
-                traversal_path.append(item)
-                print("traversal path from else statement", traversal_path)
+            print("backtrack", backtrack)
+            # for item in backtrack:
+            #     traversal_path.append(item)
+            #     print("traversal path from else statement", traversal_path)
             #What exactly is BFS supposed to be doing here?
             #find the nearest room with a "?"
             #go there
@@ -83,14 +83,14 @@ def bfs(current_room, my_map, traversal_path):
     while q.size() > 0:
         path = q.dequeue()
         current = path[-1]
+        print("PATH", path)
         if current not in visited:
             visited.add(current)
             if "?" in my_map[current].values():
                 return path
-            print("CURRENT", path)
-            for key, value in my_map[current].items():
+            for neighbor in my_map[current].items():
                 path_copy = path.copy()
-                path_copy.append(value)
+                path_copy.append(neighbor[1])
                 q.enqueue(path_copy)
 
 #Update my own map
