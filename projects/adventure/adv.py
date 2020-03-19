@@ -68,8 +68,18 @@ def go_travel(location):
             
             for step in backtrack:
                 """
-                
+                1. Find the direction connected to that room
+                2. Append direction to travel_path
                 """
+                print("STEP", step)
+                for key, value in my_map[current_room.id].items():
+                    print("KEY:", key, "VALUE: ", value)
+                    if value == step:
+                        print("VALUE AND STEP", value, step)
+                        player.travel(key)
+                        traversal_path.append(key)
+                        print("I am travelling!!!")
+
 
 
     
