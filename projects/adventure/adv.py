@@ -11,10 +11,10 @@ world = World()
 
 # You may uncomment the smaller graphs for development and testing purposes.
 # map_file = "maps/test_line.txt"
-map_file = "maps/test_cross.txt"
-# map_file = "maps/test_loop.txt"
+# map_file = "maps/test_cross.txt"
+#map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
-#map_file = "maps/main_maze.txt"
+map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph=literal_eval(open(map_file, "r").read())
@@ -33,24 +33,27 @@ traversal_path = []
 
 def go_travel(location):
 
-    s = Stack()
-    visited = set()
-    s.push(player.current_room)
 
-
-    while len(room_graph) > len(traversal_path) and s.size() > 0:
-        here = s.pop()
-        print("I'm right here!!!", here)
-        if "s" in here.get_exits():
-            player.travel("s")
-            traversal_path.append("s")
-            go_travel(player.current_room)
-        elif "n" in here.get_exits():
-            player.travel("n")
-            traversal_path.append("n")
-            go_travel(player.current_room)
-    print("TRAVERSAL PATH", traversal_path)
+    for i in range(2):
+        player.travel("s")
+        traversal_path.append("s")
+    for i in range(4):
+        player.travel("n")
+        traversal_path.append("n")
+        print("going north", player.current_room)
+    for i in range(2):
+        player.travel("s")
+        traversal_path.append("s")
+        print("going south", player.current_room)
+    for i in range(2):
+        player.travel("e")
+        traversal_path.append("e")
+    for i in range(4):
+        player.travel("w")
+        traversal_path.append("w")
+    
     return traversal_path
+
 
 ####################################
 # TRAVERSAL TEST
