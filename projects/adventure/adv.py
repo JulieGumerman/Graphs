@@ -31,7 +31,7 @@ traversal_path = []
 
 ################################
 
-def go_travel():
+def go_travel(location):
 
     s = Stack()
     visited = set()
@@ -44,18 +44,18 @@ def go_travel():
         if "s" in here.get_exits():
             player.travel("s")
             traversal_path.append("s")
-            go_travel()
+            go_travel(player.current_room)
         elif "n" in here.get_exits():
             player.travel("n")
             traversal_path.append("n")
-            go_travel()
-
+            go_travel(player.current_room)
+    print("TRAVERSAL PATH", traversal_path)
     return traversal_path
 
 ####################################
 # TRAVERSAL TEST
 
-go_travel()
+go_travel(player.current_room)
 
 visited_rooms = set()
 player.current_room = world.starting_room
