@@ -31,16 +31,18 @@ traversal_path = []
 
 ################################
 
-def go_travel(location):
+def go_travel(location, my_map=None):
 
 #DFT for getting to the end of the road
     s = Stack()
     visited = set()
-    my_map = {}
+    if my_map==None:
+        my_map = {}
 
     s.push(location)
 
     while s.size() > 0:
+        print("SIZE", s.size())
         current_room = s.pop()
 
         if current_room not in visited:
@@ -62,23 +64,28 @@ def go_travel(location):
                     break
             print("current map", my_map)
         else:
-            backtrack = bfs(current_room.id, my_map, traversal_path)
-            print("backtrack", backtrack)
+            backtrack = bfs(current_room.id, my_map)
+            go_travel(backtrack[-1], my_map)
             #Now, I have my route to backtrack; now, how do I do it???
             
-            for step in backtrack:
-                """
-                1. Find the direction connected to that room
-                2. Append direction to travel_path
-                """
-                print("STEP", step)
-                for key, value in my_map[current_room.id].items():
-                    print("KEY:", key, "VALUE: ", value)
-                    if value == step:
-                        print("VALUE AND STEP", value, step)
-                        player.travel(key)
-                        traversal_path.append(key)
-                        print("I am travelling!!!")
+            # for step in backtrack:
+            #     """
+            #     1. Find the direction connected to that room
+            #     2. Append direction to travel_path
+            #     """
+            #     for key, value in my_map[current_room.id].items():
+            #         if value == step:
+            #             route.append(key)
+            #             print("ROUTE!!!", route)
+            #             break
+            # for direction in route:
+            #     player.travel(direction)
+            #     traversal_path.append(direction)
+
+            # if "?" in my_map[current_room.id].values():
+            #     s.push(current_room)
+
+
 
 
 
@@ -86,14 +93,16 @@ def go_travel(location):
     return traversal_path
 
 #BFS to find the next room with a "?"
-def bfs(current_room, my_map, traversal_path):
+def bfs(current_room, my_map):
     q = Queue()
     q.enqueue([current_room])
     visited = set()
+    route = []
     while q.size() > 0:
         path = q.dequeue()
         current = path[-1]
         print("PATH", path)
+        print("CURRENT", current)
         if current not in visited:
             visited.add(current)
             if "?" in my_map[current].values():
@@ -101,6 +110,7 @@ def bfs(current_room, my_map, traversal_path):
             for neighbor in my_map[current].items():
                 path_copy = path.copy()
                 path_copy.append(neighbor[1])
+                route.append(neighbor[0])
                 q.enqueue(path_copy)
 
 #Update my own map
