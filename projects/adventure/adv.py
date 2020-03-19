@@ -64,12 +64,12 @@ def go_travel(location):
         else:
             backtrack = bfs(current_room.id, my_map, traversal_path)
             print("backtrack", backtrack)
-            # for item in backtrack:
-            #     traversal_path.append(item)
-            #     print("traversal path from else statement", traversal_path)
-            #What exactly is BFS supposed to be doing here?
-            #find the nearest room with a "?"
-            #go there
+            #Now, I have my route to backtrack; now, how do I do it???
+            
+            for step in backtrack:
+                """
+                
+                """
 
 
     
