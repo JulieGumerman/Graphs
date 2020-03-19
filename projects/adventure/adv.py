@@ -54,8 +54,9 @@ def go_travel(location):
         for key, value in my_map[current_room.id].items():
             if value == "?":
                 player.travel(key)
+                s.push(player.current_room)
                 traversal_path.append(key)
-            print("KEY:", key, "VALUE:", value)
+            #print("KEY:", key, "VALUE:", value)
 
         
         #if "?" in my_map[current_room.id].values():
@@ -100,7 +101,6 @@ def map_it(maze_map, room):
         's': '?',
         'w': '?'
     }
-    print("get those exits", room.get_exits())
     if "s" not in room.get_exits():
         maze_map[room.id]['s'] = "X"
     if "n" not in room.get_exits():
