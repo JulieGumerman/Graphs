@@ -5,7 +5,8 @@ class Graph:
         self.vertices = {}
     
     def add_vertex(self, vertex_id):
-        self.vertices[vertex_id] = set()
+        if vertex_id not in self.vertices:
+            self.vertices[vertex_id] = set()
 
     def add_edge(self, v1, v2):
         if v1 in self.vertices and v2 in self.vertices:
@@ -25,26 +26,20 @@ def earliest_ancestor(ancestors, starting_node):
         child = pair [1]
         graph.add_vertex(parent)
         graph.add_vertex(child)
-        graph.add_edge(parent, child)
+        graph.add_edge(child, parent)
     
     q = Queue()
     q.enqueue([starting_node])
 
     earliest_ancestor = -1
-    longest_path = []
     longest_path_length = 1
-    visited = set()
 
     while q.size() > 0:
         path = q.dequeue()
         current_vertex = path[-1]
 
-        if len(path) == longest_path_length and current_vertex < earliest_ancestor:
+        if (len(path) >= longest_path_length and current_vertex < earliest_ancestor) or len(path) > longest_path_length:
             longest_path_length = len(path)
-            earliest_ancestor = current_vertex
-        if len(path) > longest_path_length:
-            longest_path_length = len(path)
-            print(longest_path)
             earliest_ancestor = current_vertex
 
 
