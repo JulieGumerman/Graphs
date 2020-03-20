@@ -75,31 +75,22 @@ def go_travel():
 
 
 def map_it(cur_room, prev_room, visited, direction_traveled):
-    # print(f"In Mark Visiting--- Current Room: {cur_room}, Prev Room: {prev_room}, direction traveled: {direction_traveled}")
     if cur_room not in visited:
-        # Get all exits of current room, add as values of current visited key
         exits_array = player.current_room.get_exits()
         new_room_exits = {}
 
         for direction in exits_array:
             new_room_exits[direction] = '?'
-        # If direction_traveled was south, then direction for north will be previous node
         if direction_traveled == 's':
             new_room_exits['n'] = prev_room
-        # If direction_traveled was north, then direction for south will be previous node
         if direction_traveled == 'n':
             new_room_exits['s'] = prev_room
-        # If direction_traveled was east, then direction for west will be previous node
         if direction_traveled == 'e':
             new_room_exits['w'] = prev_room
-        # If direction_traveled was west, then direction for east will be previous node
         if direction_traveled == 'w':
             new_room_exits['e'] = prev_room
-        # finally add new room to visited
         visited[cur_room] = new_room_exits
-        # Add id of current room to visited[prev_room][direction_traveled]
         visited[prev_room][direction_traveled] = cur_room
-        # print("FInal Visited", visited)
 
     else:
         if direction_traveled == 's':
