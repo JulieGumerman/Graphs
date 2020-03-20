@@ -35,7 +35,7 @@ def go_travel():
     visited = set()
     my_map = {}
 
-    s.push(player.current_room)
+    s.push(player.current_room.id)
 
     while s.size() > 0:
         print("SIZE", s.size())
@@ -43,45 +43,38 @@ def go_travel():
 
         if current_room not in visited:
             visited.add(current_room)
-            map_it(my_map, current_room)
+            map_it(my_map, player.current_room)
             print("current map", my_map)
         
 
-        if "?" in my_map[current_room.id].values():
-            for key, value in my_map[current_room.id].items():
+        if "?" in my_map[current_room].values():
+            for key, value in my_map[current_room].items():
                 if value == "?":
                     this_room = player.current_room.id
                     print("this room", this_room)
                     previous_room = this_room
                     player.travel(key)
                     my_map[this_room][key] = player.current_room.id
-                    s.push(player.current_room)
+                    s.push(player.current_room.id)
                     traversal_path.append(key)
                     break
             print("current map", my_map)
         else:
-            backtrack = bfs(current_room.id, my_map)
-            route = []
-            #Now, I have my route to backtrack; now, how do I do it???
-            
-            for step in backtrack:
-                """
-                1. Find the direction connected to that room
-                2. Append direction to travel_path
-                """
-                print("woe is me")
-            #     for key, value in my_map[current_room.id].items():
-            #         if value == step:
-            #             route.append(key)
-            #             print("ROUTE!!!", route)
-            #             break
-
-            # for direction in route:
-            #     player.travel(direction)
-            #     traversal_path.append(direction)
-
-            # if "?" in my_map[current_room.id].values():
-            #     s.push(current_room)
+            if bfs(current_room, my_map) is None:
+                return
+            path_to_unexplored = bfs(current_room, my_map)
+            new_route = []
+            for index, room in enumerate(path_to_unexplored):
+                if index < len(path_to_unexplored) - 1 and path_to_unexplored[index + 1] in my_map[room].values():
+                    for key, value in my_map[room].items():
+                        if value == path_to_unexplored[index + 1]:
+                            new_route.append(key)
+            for move in new_route:
+                prev_room = player.current_room.id
+                player.travel(move)
+                traversal_path.append(move)
+            if "?" in my_map[player.current_room.id].values():
+                s.push(player.current_room.id)
     
     return traversal_path
 
@@ -101,10 +94,11 @@ def bfs(current_room, my_map):
             if "?" in my_map[current].values():
                 return path
             for neighbor in my_map[current].items():
-                path_copy = path.copy()
-                path_copy.append(neighbor[1])
-                route.append(neighbor[0])
-                q.enqueue(path_copy)
+                if neighbor[1] != "X":
+                    path_copy = path.copy()
+                    path_copy.append(neighbor[1])
+                    route.append(neighbor[0])
+                    q.enqueue(path_copy)
 
 #Update my own map
 def map_it(maze_map, room):
