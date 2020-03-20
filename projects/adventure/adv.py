@@ -29,95 +29,105 @@ player = Player(world.starting_room)
 # traversal_path = ['n', 'n']
 traversal_path = []
 
-################################
+# ################################
+
+
 def go_travel():
+    visited = {
+      0: {'w': '?', 's': '?', 'n': '?', 'e': '?' }
+    }
     s = Stack()
-    visited = set()
-    my_map = {}
+    prev_room = 0
+    direction_traveled = ''
 
-    s.push(player.current_room.id)
-
+    s.push(0)
     while s.size() > 0:
-        print("SIZE", s.size())
-        current_room = s.pop()
-
-        if current_room not in visited:
-            visited.add(current_room)
-            map_it(my_map, player.current_room)
-            print("current map", my_map)
-        
-
-        if "?" in my_map[current_room].values():
-            for key, value in my_map[current_room].items():
-                if value == "?":
-                    this_room = player.current_room.id
-                    print("this room", this_room)
-                    previous_room = this_room
+        cur_room = s.pop()
+        map_it(player.current_room.id, prev_room, visited, direction_traveled)
+        if '?' in visited[cur_room].values():
+            for key, value in visited[cur_room].items():
+                if value == '?':
                     player.travel(key)
-                    my_map[this_room][key] = player.current_room.id
                     s.push(player.current_room.id)
-                    traversal_path.append(key)
+                    direction_traveled = key
+                    traversal_path.append(direction_traveled)
+                    prev_room = cur_room
                     break
-            print("current map", my_map)
         else:
-            if bfs(current_room, my_map) is None:
+            if bfs(cur_room, visited) is None:
                 return
-            path_to_unexplored = bfs(current_room, my_map)
-            new_route = []
-            for index, room in enumerate(path_to_unexplored):
-                if index < len(path_to_unexplored) - 1 and path_to_unexplored[index + 1] in my_map[room].values():
-                    for key, value in my_map[room].items():
-                        if value == path_to_unexplored[index + 1]:
-                            new_route.append(key)
-            for move in new_route:
+            path_to_exit = bfs(cur_room, visited)
+            new_traverse = []
+            for index, room in enumerate(path_to_exit):
+                if index < len(path_to_exit) - 1 and path_to_exit[index + 1] in visited[room].values():
+                    for key, value in visited[room].items():
+                        if value == path_to_exit[index + 1]:
+                            new_traverse.append(key)
+            # Move there
+            for move in new_traverse:
                 prev_room = player.current_room.id
                 player.travel(move)
+                direction_traveled = move
                 traversal_path.append(move)
-            if "?" in my_map[player.current_room.id].values():
+            if '?' in visited[player.current_room.id].values():
                 s.push(player.current_room.id)
-    
-    return traversal_path
 
-#BFS to find the next room with a "?"
-def bfs(current_room, my_map):
+
+
+def map_it(cur_room, prev_room, visited, direction_traveled):
+    # print(f"In Mark Visiting--- Current Room: {cur_room}, Prev Room: {prev_room}, direction traveled: {direction_traveled}")
+    if cur_room not in visited:
+        # Get all exits of current room, add as values of current visited key
+        exits_array = player.current_room.get_exits()
+        new_room_exits = {}
+
+        for direction in exits_array:
+            new_room_exits[direction] = '?'
+        # If direction_traveled was south, then direction for north will be previous node
+        if direction_traveled == 's':
+            new_room_exits['n'] = prev_room
+        # If direction_traveled was north, then direction for south will be previous node
+        if direction_traveled == 'n':
+            new_room_exits['s'] = prev_room
+        # If direction_traveled was east, then direction for west will be previous node
+        if direction_traveled == 'e':
+            new_room_exits['w'] = prev_room
+        # If direction_traveled was west, then direction for east will be previous node
+        if direction_traveled == 'w':
+            new_room_exits['e'] = prev_room
+        # finally add new room to visited
+        visited[cur_room] = new_room_exits
+        # Add id of current room to visited[prev_room][direction_traveled]
+        visited[prev_room][direction_traveled] = cur_room
+        # print("FInal Visited", visited)
+
+    else:
+        if direction_traveled == 's':
+            visited[cur_room]['n'] = prev_room
+        if direction_traveled == 'n':
+            visited[cur_room]['s'] = prev_room
+        if direction_traveled == 'e':
+            visited[cur_room]['w'] = prev_room
+        if direction_traveled == 'w':
+            visited[cur_room]['e'] = prev_room
+
+def bfs(starting_vertex, visited):
     q = Queue()
-    q.enqueue([current_room])
-    visited = set()
-    route = []
+    q.enqueue([starting_vertex])
+    visited_rooms = set()
+
     while q.size() > 0:
         path = q.dequeue()
-        current = path[-1]
-        print("PATH", path)
-        print("CURRENT", current)
-        if current not in visited:
-            visited.add(current)
-            if "?" in my_map[current].values():
+        v = path[-1]
+        if v not in visited_rooms:
+            if '?' in visited[v].values():
                 return path
-            for neighbor in my_map[current].items():
-                if neighbor[1] != "X":
-                    path_copy = path.copy()
-                    path_copy.append(neighbor[1])
-                    route.append(neighbor[0])
-                    q.enqueue(path_copy)
+            visited_rooms.add(v)
+            for key, value in visited[v].items():
+                path_copy = path.copy()
+                path_copy.append(value)
+                q.enqueue(path_copy)    
 
-#Update my own map
-def map_it(maze_map, room):
-    maze_map[room.id] = {
-        'n': '?',
-        'e': '?',
-        's': '?',
-        'w': '?'
-    }
-    if "s" not in room.get_exits():
-        maze_map[room.id]['s'] = "X"
-    if "n" not in room.get_exits():
-        maze_map[room.id]['n'] = "X"
-    if "e" not in room.get_exits():
-        maze_map[room.id]['e'] = "X"
-    if "w" not in room.get_exits():
-        maze_map[room.id]['w'] = "X"
-
-    
 ####################################
 # TRAVERSAL TEST
 
