@@ -30,16 +30,12 @@ player = Player(world.starting_room)
 traversal_path = []
 
 ################################
-
-def go_travel(location, my_map=None):
-
-#DFT for getting to the end of the road
+def go_travel():
     s = Stack()
     visited = set()
-    if my_map==None:
-        my_map = {}
+    my_map = {}
 
-    s.push(location)
+    s.push(player.current_room)
 
     while s.size() > 0:
         print("SIZE", s.size())
@@ -73,18 +69,19 @@ def go_travel(location, my_map=None):
                 1. Find the direction connected to that room
                 2. Append direction to travel_path
                 """
-                for key, value in my_map[current_room.id].items():
-                    if value == step:
-                        route.append(key)
-                        print("ROUTE!!!", route)
-                        break
+                print("woe is me")
+            #     for key, value in my_map[current_room.id].items():
+            #         if value == step:
+            #             route.append(key)
+            #             print("ROUTE!!!", route)
+            #             break
 
-            for direction in route:
-                player.travel(direction)
-                traversal_path.append(direction)
+            # for direction in route:
+            #     player.travel(direction)
+            #     traversal_path.append(direction)
 
-            if "?" in my_map[current_room.id].values():
-                s.push(current_room)
+            # if "?" in my_map[current_room.id].values():
+            #     s.push(current_room)
     
     return traversal_path
 
@@ -125,11 +122,12 @@ def map_it(maze_map, room):
         maze_map[room.id]['e'] = "X"
     if "w" not in room.get_exits():
         maze_map[room.id]['w'] = "X"
+
     
 ####################################
 # TRAVERSAL TEST
 
-go_travel(player.current_room)
+go_travel()
 
 visited_rooms = set()
 player.current_room = world.starting_room
