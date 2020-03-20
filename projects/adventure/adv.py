@@ -33,19 +33,20 @@ traversal_path = []
 
 
 def go_travel():
-    visited = {
+    my_map = {
       0: {'w': '?', 's': '?', 'n': '?', 'e': '?' }
     }
     s = Stack()
     prev_room = 0
     direction_traveled = ''
 
+    #Had to refactor it so that only the ids, not the entire room, was in the stack
     s.push(0)
     while s.size() > 0:
         cur_room = s.pop()
-        map_it(player.current_room.id, prev_room, visited, direction_traveled)
-        if '?' in visited[cur_room].values():
-            for key, value in visited[cur_room].items():
+        map_it(player.current_room.id, prev_room, my_map, direction_traveled)
+        if '?' in my_map[cur_room].values():
+            for key, value in my_map[cur_room].items():
                 if value == '?':
                     player.travel(key)
                     s.push(player.current_room.id)
@@ -54,22 +55,26 @@ def go_travel():
                     prev_room = cur_room
                     break
         else:
-            if bfs(cur_room, visited) is None:
+            if bfs(cur_room, my_map) is None:
                 return
-            path_to_exit = bfs(cur_room, visited)
+            path_to_exit = bfs(cur_room, my_map)
             new_traverse = []
+            #Back to tuples for data management
             for index, room in enumerate(path_to_exit):
-                if index < len(path_to_exit) - 1 and path_to_exit[index + 1] in visited[room].values():
-                    for key, value in visited[room].items():
+                #Manages +1 errors while checking to make sure that your room is in visited
+                #There has to be a cleaner way than this, but I couldn't figure out how to do it without enumerate: That index helps you locate where you are in the path; this is where I kept getting stuck earlier
+                if index < len(path_to_exit) - 1 and path_to_exit[index + 1] in my_map[room].values():
+                    for key, value in my_map[room].items():
                         if value == path_to_exit[index + 1]:
                             new_traverse.append(key)
+
             # Move there
             for move in new_traverse:
                 prev_room = player.current_room.id
                 player.travel(move)
                 direction_traveled = move
                 traversal_path.append(move)
-            if '?' in visited[player.current_room.id].values():
+            if '?' in my_map[player.current_room.id].values():
                 s.push(player.current_room.id)
 
 
@@ -79,6 +84,7 @@ def map_it(cur_room, prev_room, visited, direction_traveled):
         exits_array = player.current_room.get_exits()
         new_room_exits = {}
 
+        #You absolutely HAVE to fill in the directions going both ways, or your bfs will take you back to the last room with a "?" and you'll wonder why your test results have not changed
         for direction in exits_array:
             new_room_exits[direction] = '?'
         if direction_traveled == 's':
