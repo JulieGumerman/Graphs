@@ -1,3 +1,7 @@
+import random
+from util import Queue, Stack
+
+
 class User:
     def __init__(self, name):
         self.name = name
